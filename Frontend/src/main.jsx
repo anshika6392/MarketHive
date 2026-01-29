@@ -3,10 +3,19 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import Navbar from './components/Navbar.jsx'
+import { Auth0Provider } from "@auth0/auth0-react";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Navbar ></Navbar>
-    <App/>
+    <Auth0Provider
+      domain="dev-bxf3zdride06gk0v.us.auth0.com"
+      clientId="EsdFuOWEppWrnaCLTQwuV1iVcSAZZn5d"
+      authorizationParams={{ redirect_uri: window.location.origin }}
+      cacheLocation="localstorage"
+    // useRefreshTokens={true}
+    >
+      <Navbar ></Navbar>
+      <App />
+    </Auth0Provider>
   </StrictMode>,
 )

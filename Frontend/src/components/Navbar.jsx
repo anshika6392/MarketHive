@@ -1,6 +1,19 @@
 import React from 'react'
+import Dropdown from './Dropdown'
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
+
+    const {
+    user,
+    loginWithRedirect,
+    isAuthenticated,
+    logout,
+    getAccessTokenSilently,
+    isLoading,
+    error
+  } = useAuth0();
+
     return (
         <div className='w-full fixed top-0 left-0  z-50'>
             {/* ========== HEADER ========== */}
@@ -91,7 +104,9 @@ const Navbar = () => {
                                             </svg>
                                             About
                                         </a>
-                                        {/* Dropdown */}
+
+
+                                        {/* Dropdown
                                         <div className="hs-dropdown [--strategy:static] md:[--strategy:fixed] [--adaptive:none] md:[--adaptive:adaptive] [--is-collapse:true] md:[--is-collapse:false] ">
                                             <button
                                                 id="hs-header-base-dropdown"
@@ -213,7 +228,11 @@ const Navbar = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* End Dropdown */}
+                                        End Dropdown */}
+                                        <Dropdown></Dropdown>
+
+
+
                                         <a
                                             className="p-2 flex items-center text-sm text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden "
                                             href="#"
@@ -294,6 +313,18 @@ const Navbar = () => {
                                     >
                                         Sign in
                                     </a>
+
+                                    {/* {true?<button>true button</button>:<h1>false button</h1>} */}
+                                    {isAuthenticated?<img src={user.picture}></img> : <button
+                                        className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                         onClick={() => loginWithRedirect()}
+                                    >
+                                        Login
+                                    </button>  }
+                                    
+                                    
+                                    
+                                    
                                     <a
                                         className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600"
                                         href="#"
@@ -328,7 +359,7 @@ const Navbar = () => {
                             aria-controls="hs-nav-secondary"
                             aria-label="Toggle navigation"
                         >
-                            
+
                             <svg
                                 className="hs-dropdown-open:rotate-180 shrink-0 size-4 ms-1"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -374,7 +405,7 @@ const Navbar = () => {
                             >
                                 Beauty
                             </a>
-                             <a
+                            <a
                                 className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
                                 href="#"
                             >
