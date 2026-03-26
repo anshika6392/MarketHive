@@ -1,22 +1,18 @@
 import User from "../models/userModel.js"
+import bcrypt from "bcryptjs";
 
 export const addUser = async (req, res) => {
     try {
-        let { type } = req.body || {};
 
-        const { name, email, password } = req.body;
+        const { name, email, password ,type} = req.body;
         if (!name || !email || !password) {
             return res.status(501).json({ message: "Missing Required Fields" });
         }
 
-        const count = await User.estimatedDocumentCount();
-
-        if (count == 0) {
-            type: "admin"
+        if(type=="admin"){
+            return res.status(403).json({Error:"Not Authorized to Become Admin"});
         }
-
-        console.log("count is - > ", count);
-
+      
         const user = await User.create({
             name,
             email,
@@ -98,3 +94,50 @@ export const updateUser = async (req, res) => {
     }
 }
 
+// export const login = async (req, res) => {
+//     const {email,password}=req.body;
+
+//     const user=await User.findOne({email});
+
+//     if(!user){
+//         res.status(404);
+//         return res.json({message:"User doesn't exist in DB"})
+//     }
+
+//     if(user.password == password){
+//         return res.status(200).json({messagew:"Login done"})
+//     }
+//     else{
+//         return res.status(401).json("Wrong Password");
+//     }
+// }
+
+
+export const login = async (req, res) => {
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        return res.status(404).json({ message: "user not found" });
+    }
+
+    //   if(user.password==password){
+    //     return res.status(200).json({message:"user login successfully"})
+    //   }
+    //   else{
+    //     return res.status(401).json({message:"wrong password"})
+    //   }
+
+    const p = await user.matchPassword(password);
+    if (!p) {
+        return res.status(401).json({ message: "wrong password" });
+    }
+    else {
+        console.log("login ho gayaaa...");
+        return res.status(200).json({ message: "user login successfully" });
+    }
+
+
+}

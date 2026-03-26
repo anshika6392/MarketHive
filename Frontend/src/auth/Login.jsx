@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react'
 import { useState } from 'react';
 
@@ -7,7 +8,21 @@ const Login = () => {
 const [email,setEmail]=useState("");
 const [password,setPassword]=useState("");
 
-const handleClick=()=>{
+const handleClick=async(e)=>{
+   e.preventDefault();
+   try {
+
+    const response=await axios.post('http://localhost:5000/api/user/login',{
+        email,
+        password
+    
+    });
+    console.log(response);
+    alert("successfull Login");
+
+   } catch (error) {
+      console.log(error);
+   }
    
 }
 
@@ -18,7 +33,7 @@ const handleClick=()=>{
             <form action="">
                 <input type="text" placeholder="email" onChange={(e)=>{setEmail(e.target.value)}}/>
                 <input type="text" placeholder="password"  onChange={(e)=>{setPassword(e.target.value)}}/>
-                <button >Login</button>
+                <button onClick={handleClick}>Login</button>
 
             </form>
         </div>
