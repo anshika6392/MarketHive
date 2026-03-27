@@ -138,6 +138,4 @@ export const login = async (req, res) => {
         console.log("login ho gayaaa...");
         return res.status(200).json({ message: "user login successfully" });
     }
-
-
 }
