@@ -32,7 +32,7 @@ userSchema.pre("save",async function(){
     this.password=await bcryptjs.hash(this.password,10);
 })
 
-//check password
+//check password by comparing hash vallue with the entered plain password
 userSchema.methods.matchPassword=async function(enteredPassword){
     return  await bcryptjs.compare(enteredPassword,this.password);
 }

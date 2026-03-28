@@ -16,6 +16,7 @@ const Login = () => {
                 email,
                 password
             });
+            localStorage.setItem("token",response.data.data.token);
             console.log(response);
             toast.success("Login Successfull");
         } catch (error) {

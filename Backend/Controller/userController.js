@@ -1,3 +1,4 @@
+import generateToken from "../config/genrateToken.js";
 import User from "../models/userModel.js"
 import bcrypt from "bcryptjs";
 
@@ -134,8 +135,15 @@ export const login = async (req, res) => {
     if (!p) {
         return res.status(401).json({ message: "wrong password" });
     }
-    else {
-        console.log("login ho gayaaa...");
-        return res.status(200).json({ message: "user login successfully" });
+    
+    if(p && user){ //11 : 1
+        const token=generateToken(user._id);
+
+        res.status(200).json({messege:"Login Succesfull",data:{
+            name:user.name,
+            email:user.email,
+            type:user.type,
+            token:token
+        }})
     }
 }
