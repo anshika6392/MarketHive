@@ -1,0 +1,31 @@
+import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
+
+const protect = async (req, res, next) => {
+    let token;
+
+    // 1️⃣ Check Authorization Header
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+        console.log("Bearer Token Found")
+        token = req.headers.authorization.split(" ")[1];
+    }
+
+    // 3️⃣ If no token
+    if (!token) {
+        return res.status(401).json({ message: "Not authorized, no token" });
+    }
+
+    try {
+        // 4️⃣ Verify Token
+        const decoded = jwt.verify(token, "Anshika@1234"); //it will dehash toekn and return a object which wil contain userId,token created date,expiry date
+
+        // 5️⃣ Get user from DB (without password)
+        req.requester = await User.findById(decoded.id).select("-password");
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Not authorized, token failed" });
+    }
+
+}
+
+export default protect;

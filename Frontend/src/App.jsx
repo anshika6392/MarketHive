@@ -10,19 +10,19 @@ import GetAllUser from "./pages/GetAllUser";
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route  path='/' element={<Home></Home>} />
-        <Route  path='/login' element={<Login></Login>} />
-        <Route  path='/SignUp' element={<SignUp></SignUp>}/>
-        <Route  path='/Cart' element= {<Cart></Cart>}/>
-        <Route  path='/productDetails' element={<ProductDetails></ProductDetails>} />
-        <Route  path='/register' element={<Register></Register>} />
-        <Route  path='/checkout' element ={<Checkout></Checkout>} />
-        <Route  path='/getAllUsers' element ={<GetAllUser></GetAllUser>} />
-        
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter>
+    <Routes>
+      <Route path='/' element={<Home></Home>} />
+      <Route path='/login' element={<Login></Login>} />
+      <Route path='/SignUp' element={<SignUp></SignUp>} />
+      <Route path='/Cart' element={<Cart></Cart>} />
+      <Route path='/productDetails' element={<ProductDetails></ProductDetails>} />
+      <Route path='/register' element={<Register></Register>} />
+      <Route path='/checkout' element={<Checkout></Checkout>} />
+      <Route path='/getAllUsers' element={<GetAllUser></GetAllUser>} />
+
+    </Routes>
+    // </BrowserRouter>
   )
 }
 

@@ -5,15 +5,15 @@ import bcrypt from "bcryptjs";
 export const addUser = async (req, res) => {
     try {
 
-        const { name, email, password ,type} = req.body;
+        const { name, email, password, type } = req.body;
         if (!name || !email || !password) {
             return res.status(501).json({ message: "Missing Required Fields" });
         }
 
-        if(type=="admin"){
-            return res.status(403).json({Error:"Not Authorized to Become Admin"});
+        if (type == "admin") {
+            return res.status(403).json({ Error: "Not Authorized to Become Admin" });
         }
-      
+
         const user = await User.create({
             name,
             email,
@@ -30,6 +30,11 @@ export const addUser = async (req, res) => {
 }
 
 export const getAllUsers = async (req, res) => {
+
+    if (req.requester.type != "admin") {
+        res.status(401).json({ message: "User Must Be Admin to see ALL USERS" });
+    }
+
     try {
         const users = await User.find();
         res.status(200).json(users);
@@ -55,6 +60,10 @@ export const getSpecificUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
     const { id } = req.body;
 
+    if (req.requester.type != "admin" && req.requester._id != id) {
+        return res.status(401).json({ message: "Not Authorized to Delete" })
+    }
+
     try {
         const user = await User.findByIdAndDelete(id);
         if (!user) {
@@ -71,6 +80,13 @@ export const deleteUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const { id } = req.body;
+
+    console.log(req.requester);
+
+    if (req.requester.type != "admin" && req.requester._id != id) {
+        return res.status(401).json({ message: "tmhare aukat ni h mujhe update krne ki smjheee!!" })
+    }
+
     try {
         const user = await User.findById(id);
         if (!User) {
@@ -85,7 +101,7 @@ export const updateUser = async (req, res) => {
         if (profilepic) updateData.profilepic = profilepic;
         if (type) updateData.type = type;
 
-        const updatedUser = await User.findByIdAndUpdate(id, { $set: updatedData },
+        const updatedUser = await User.findByIdAndUpdate(id, { $set: updateData },
             { new: true });
 
         res.status(200).json({ message: "user updated successfully" });
@@ -132,18 +148,22 @@ export const login = async (req, res) => {
     //   }
 
     const p = await user.matchPassword(password);
+
     if (!p) {
         return res.status(401).json({ message: "wrong password" });
     }
-    
-    if(p && user){ //11 : 1
-        const token=generateToken(user._id);
 
-        res.status(200).json({messege:"Login Succesfull",data:{
-            name:user.name,
-            email:user.email,
-            type:user.type,
-            token:token
-        }})
+    if (p && user) { //11 : 1
+        const token = generateToken(user._id);
+
+        res.status(200).json({
+            messege: "Login Succesfull", data: {
+                name: user.name,
+                email: user.email,
+                type: user.type,
+                token: token
+            }
+        })
     }
 }
+

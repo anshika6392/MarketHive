@@ -1,8 +1,11 @@
 import React from 'react'
 import Dropdown from './Dropdown'
 import { useAuth0 } from "@auth0/auth0-react";
+import {useNavigate} from "react-router-dom"
 
 const Navbar = () => {
+
+    const navigate=useNavigate();
 
     const {
     user,
@@ -315,9 +318,8 @@ const Navbar = () => {
                                     </a>
 
                                     {/* {true?<button>true button</button>:<h1>false button</h1>} */}
-                                    {isAuthenticated?<img src={user.picture}></img> : <a
+                                    {isAuthenticated?<img src={user.picture}></img> : <a onClick={()=>navigate("/login")}
                                         className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                        href="../auth"
                                     >
                                         
                                         Login
