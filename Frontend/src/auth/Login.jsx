@@ -19,9 +19,10 @@ const Login = () => {
             localStorage.setItem("token", response.data.data.token);
             console.log(response);
             toast.success("Login Successfull");
+            navigate('/');
         } catch (error) {
-            toast.error("Somenthing Went Wrong")
-            console.log(error);
+            console.log("Err : ",error);
+            toast.error(error.response.data.message)
         }
     }
 
