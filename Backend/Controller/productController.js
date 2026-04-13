@@ -80,3 +80,98 @@ export const getAllProductsBySeller = async (req, res) => {
         res.status(400).json({ message: "Something Went Wrong" });
     }
 }
+
+export const deleteManyProducts = async (req, res) => {
+    try {
+        const { productIDs } = req.body;
+
+        // ✅ 1. Validate input
+        if (!Array.isArray(productIDs) || productIDs.length === 0) {
+            return res.status(400).json({
+                message: "productIDs must be a non-empty array",
+            });
+        }
+
+        // assume req.user me login user ka data hai
+        const user = req.requester;
+
+        let deleteQuery = {};
+
+        // ✅ 2. Role based authorization
+        if (user.role === "admin") {
+            // admin sab delete kar sakta hai
+            deleteQuery = { _id: { $in: productIDs } };
+        } else {
+            // seller sirf apne products delete kare
+            deleteQuery = {
+                _id: { $in: productIDs },
+                seller: user._id,
+            };
+        }
+
+        // ✅ 3. Optional: check kitne products valid hain
+        const productsToDelete = await Product.find(deleteQuery);
+
+        if (productsToDelete.length === 0) {
+            return res.status(403).json({
+                message: "No valid products found to delete",
+            });
+        }
+
+        // ✅ 4. Delete
+        const result = await Product.deleteMany(deleteQuery);
+
+        // ✅ 5. Response
+        res.status(200).json({ message: "Products deleted successfully", deletedCount: result.deletedCount });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+export const updateProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const { name, description, price, discountPrice, category } = req.body;
+
+    const product = await Product.findById(productId);
+
+    // ✅ Product not found
+    if (!product) {
+      return res.status(404).json({ message: "Product Not Found" });
+    }
+
+    // ✅ Authorization check
+    if (
+      req.requester.type !== "admin" &&
+      req.requester._id.toString() !== product.seller.toString()
+    ) {
+      return res.status(401).json({ message: "Not Authorized to Update Product" });
+    }
+
+    // ✅ Build update object
+    const updatedData = {};
+
+    if (name) updatedData.name = name;
+    if (description) updatedData.description = description;
+    if (price) updatedData.price = price;
+    if (discountPrice) updatedData.discountPrice = discountPrice;
+    if (category) updatedData.category = category;
+
+    // ✅ Correct update query
+    const updated = await Product.updateOne(
+      { _id: productId },
+      { $set: updatedData }
+    );
+
+    res.status(200).json({
+      message: "Product updated successfully",
+      updated,
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
