@@ -67,3 +67,35 @@ export const addToCart = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+export const deleteItem=async(req,res)=>{
+    const{productId}=req.params;
+    const userId=req.requester._id;
+
+
+    // find the cart by the help of the user id
+const cart=await Cart.findById(userId);
+if(!cart){
+    return res.status(401).json({message:"there is no cart"});
+}
+
+
+// find the item if it is present in the cart or not
+    const item=await Cart.findOne({"items.product":productId});
+    if(!item){
+        // console.log("cart m delete hua");
+        return res.status(404).json({message:"no item in the cart to delete"});
+    }
+
+    if(!userId){
+        return res.status(401).json({message:"unauthorized to delete product from cart"});
+    }
+
+   const deletedItem=await Cart.updateOne(
+  { user: userId },
+  { $pull: { items: { product: productId } } }
+);
+
+return res.status(200).json({message:"item deleted successfully"});
+
+}
