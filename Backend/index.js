@@ -3,6 +3,7 @@ import connectDB from './config/dbconfig.js';
 import userRouter from './routes/userRouter.js'
 import productRouter from './routes/productRouter.js'
 import cartRouter from './routes/cartRouter.js'
+import categoryRouter from './routes/categoryRouter.js'
 import cors from 'cors';
 import dotenv from "dotenv"
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/',(req,res)=>{
 app.use("/api/user",userRouter);
 app.use("/api/product",productRouter);
 app.use("/api/cart",cartRouter);
+app.use("/api/category",categoryRouter);
 
 
 app.listen(port,()=>{

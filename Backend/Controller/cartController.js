@@ -10,7 +10,7 @@ export const addToCart = async (req, res) => {
 
         const product = await Product.findById(productId);
         if (!product) {
-            res.status(404).json({ message: "Product dosen't exist in DB" });
+            return res.status(404).json({ message: "Product dosen't exist in DB" });
         }
 
         // ✅ 3. Find user's cart
@@ -18,7 +18,7 @@ export const addToCart = async (req, res) => {
 
         // 👉 If cart doesn't exist → create new
         if (!cart) {
-            cart = new Cart({
+            cart = new Cart({   
                 user: userId,
                 items: [{
                     product: productId,
@@ -68,34 +68,50 @@ export const addToCart = async (req, res) => {
     }
 }
 
-export const deleteItem=async(req,res)=>{
-    const{productId}=req.params;
-    const userId=req.requester._id;
-
+export const deleteItemFromCart = async (req, res) => {
+    const { productId } = req.params;
+    const userId = req.requester._id;
+    console.log(userId);
 
     // find the cart by the help of the user id
-const cart=await Cart.findById(userId);
-if(!cart){
-    return res.status(401).json({message:"there is no cart"});
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) {
+        return res.status(401).json({ message: "there is no cart" });
+    }
+
+
+    // find the item if it is present in the cart or not
+    const item = await Cart.findOne({ "items.product": productId });
+    if (!item) {
+        // console.log("cart m delete hua");
+        return res.status(404).json({ message: "no item in the cart to delete" });
+    }
+
+    if (!userId) {
+        return res.status(401).json({ message: "unauthorized to delete product from cart" });
+    }
+
+    const deletedItem = await Cart.updateOne(
+        { user: userId },
+        { $pull: { items: { product: productId } } }
+    );
+
+    return res.status(200).json({ message: "item deleted successfully" });
+
 }
 
-
-// find the item if it is present in the cart or not
-    const item=await Cart.findOne({"items.product":productId});
-    if(!item){
-        // console.log("cart m delete hua");
-        return res.status(404).json({message:"no item in the cart to delete"});
+export const getCartData=async(req,res)=>{
+    try {
+        
+        const userId=req.requester._id;
+        
+        const cart = await Cart.findOne({ user: userId });
+       if (!cart) {
+           return res.status(401).json({ message: "there is no cart" });
+       }
+       
+       return res.status(200).json({message:"data fetched successfully",cart});
+    } catch (error) {
+        return res.status(501).json({message:error});
     }
-
-    if(!userId){
-        return res.status(401).json({message:"unauthorized to delete product from cart"});
-    }
-
-   const deletedItem=await Cart.updateOne(
-  { user: userId },
-  { $pull: { items: { product: productId } } }
-);
-
-return res.status(200).json({message:"item deleted successfully"});
-
 }
