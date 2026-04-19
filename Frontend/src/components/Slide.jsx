@@ -1,73 +1,86 @@
-import React, { useRef, useState } from 'react';
-//  Import Swiper React components
+import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 
-
- 
 import 'swiper/css';
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-
-// import './styles.css';
-
-/*import required modules*/
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-
 
 export default function App() {
   return (
-
-    <div className='h-[70vh] w-full  flex justify-center items-center'>
+    <div className='w-full flex justify-center items-center py-6'>
 
       <Swiper
-        spaceBetween={30}
-        centeredSlides={true}
+        spaceBetween={20}
+        slidesPerView={1}
+        breakpoints={{
+          640: { slidesPerView: 2 },
+          768: { slidesPerView: 3 },
+          1024: { slidesPerView: 4 },
+        }}
         autoplay={{
           delay: 2500,
           disableOnInteraction: false,
         }}
-        pagination={{
-          clickable: true,
-        }}
-        navigation={true}
+        pagination={{ clickable: true }}
+        navigation={false}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper bg-transparent w-full h-full object-contain  flex justify-center items-center"
+        className="w-[85%]"
       >
-         {/* 1 */}
+
+        {/* Slide 1 */}
         <SwiperSlide>
-          <div className='flex w-full object-cover h-auto justify-center items-center' >
-            <img  className='w-full cover' src="https://www.greenwashingindex.com/wp-content/uploads/2024/01/10-Essential-Eco-Friendly-Products-For-Green-Living.jpg" 
-              alt=""/>
+          <div className="w-full aspect-[951/464] bg-black flex items-center justify-center rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src="https://rukminim2.flixcart.com/fk-p-flap/3200/1560/image/5490168052d38f32.jpg?q=60"
+              alt="buds"
+            />
           </div>
         </SwiperSlide>
 
-        {/* 2 */}
-        <SwiperSlide >
-          <div className='flex w-auto h-auto  object-cover justify-center items-center'>
-            <img className=' object-cover' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6RC5IuhqTHnQzVMzix_ugEfcbvh_WfZ5thokghtxrv8ULrC2ZpTEUGqvCsTpOG95vknM&usqp=CAU"  alt="" />
-
+        {/* Slide 2 */}
+        <SwiperSlide>
+          <div className="w-full aspect-[951/464] bg-black flex items-center justify-center rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src="https://rukminim2.flixcart.com/fk-p-flap/3200/1560/image/e2620e20463c6c4a.png?q=60"
+              alt="watch"
+            />
           </div>
         </SwiperSlide>
 
-         {/* 3 */}
+        {/* Slide 3 */}
         <SwiperSlide>
-          <div className='flex w-auto h-auto justify-center items-center'>
-            <img src="https://dsb.edu.in/wp-content/uploads/2024/07/The-rise-of-Ecofriendly-packaging_DSB.png" alt="" />
+          <div className="w-full aspect-[951/464] bg-black flex items-center justify-center rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src="https://rukminim2.flixcart.com/fk-p-flap/3200/1560/image/fe7574d75bf6c2b9.png?q=60"
+              alt="tablet"
+            />
           </div>
         </SwiperSlide>
 
-         {/* 4 */}
+        {/* Slide 4 */}
         <SwiperSlide>
-          <div className='flex w-auto h-auto justify-center items-center'>
-            <img src="https://dsb.edu.in/wp-content/uploads/2024/07/5-ways-that-companies-adopt-sustainable-packaging-_DSB-1024x320.png" alt="" />
+          <div className="w-full aspect-[951/464] bg-black flex items-center justify-center rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src="https://rukminim2.flixcart.com/fk-p-flap/3200/1560/image/df24390167155b23.png?q=60"
+              alt="laptop"
+            />
           </div>
         </SwiperSlide>
 
-         {/* 5 */}
+        {/* Slide 5 */}
         <SwiperSlide>
-          <div className='flex w-auto h-auto justify-center items-center'>
-            <img src="https://apcocommunity.force.com/cms/delivery/media/MCX2I7VZHIBJAYXJLQL7W5RSGRUU "alt="" />
+          <div className="w-full aspect-[951/464] bg-black flex items-center justify-center rounded-xl overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src="https://rukminim2.flixcart.com/fk-p-flap/3200/1560/image/c2dd7b0e0aec86ce.png?q=60"
+              alt="powerbank"
+            />
           </div>
         </SwiperSlide>
 
