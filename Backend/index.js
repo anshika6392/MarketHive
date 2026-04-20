@@ -6,6 +6,7 @@ import cartRouter from './routes/cartRouter.js'
 import categoryRouter from './routes/categoryRouter.js'
 import cors from 'cors';
 import dotenv from "dotenv"
+import cloud from './utils/cloudinary.js';
 dotenv.config();
 
 const app=express();
