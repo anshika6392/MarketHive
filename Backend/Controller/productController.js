@@ -1,33 +1,50 @@
 import Product from "../models/productModel.js";
+import cloudinary from "cloudinary"
 
 export const createProduct = async (req, res) => {
     try {
-        console.log("mai niklaa gaddi leke")
-        // destructure data from frontend
-        const { name, description, price, image, category } = req.body;
+        const { name, description, price, category } = req.body;
+        const files = req.files;
 
         // validations
         if (!name || !description || !price || !category) {
-            return res.status(400).json({ message: "fill all the entries" });
+            return res.status(400).json({ message: "Fill all the entries" });
         }
 
+        if (!files || files.length === 0) {
+            return res.status(400).json({ message: "Provide Product Images" });
+        }
 
-        //    create product
-        const createProduct = await Product.create({
+        // 🚀 parallel upload (fast)
+        const uploads = files.map(file =>
+            cloudinary.uploader.upload(file.path,{folder:"MarketHive"})
+        );
+
+        const uploadedImages = await Promise.all(uploads);
+        const formattedImages = uploadedImages.map(img => ({
+            url: img.secure_url,
+            public_id: img.public_id
+        }));
+
+        // create product
+        const data = await Product.create({
             name,
             description,
             price,
-            image,
             seller: req.requester._id,
             category,
+            images: formattedImages
         });
 
-        res.status(200).json({ message: "Product created successfully" });
+        res.status(200).json({
+            message: "Product created successfully",
+            data
+        });
 
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Something Went Wrong", error });
     }
-}
+};
 
 export const deleteProduct = async (req, res) => {
     try {
@@ -45,13 +62,20 @@ export const deleteProduct = async (req, res) => {
             return res.status(401).json({ message: "Not Authorized to delete" });
         }
 
+        // Delete image from clodinary
+        if (product.images && product.images.length > 0) {
+            const deletePromises = product.images.map(img =>
+                cloudinary.uploader.destroy(img.public_id)
+            );
+            await Promise.all(deletePromises);
+        }
+
         const deletedProduct = await Product.findByIdAndDelete(productId);
         return res.status(200).json({ message: "product is deleted", deletedProduct });
 
     } catch (error) {
         res.status(401).json({ message: "Something Went Wrong", error });
     }
-
 }
 
 export const getAllProducts = async (req, res) => {
@@ -131,48 +155,48 @@ export const deleteManyProducts = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-  try {
-    const { productId } = req.params;
-    const { name, description, price, discountPrice, category } = req.body;
+    try {
+        const { productId } = req.params;
+        const { name, description, price, discountPrice, category } = req.body;
 
-    const product = await Product.findById(productId);
+        const product = await Product.findById(productId);
 
-    // ✅ Product not found
-    if (!product) {
-      return res.status(404).json({ message: "Product Not Found" });
+        // ✅ Product not found
+        if (!product) {
+            return res.status(404).json({ message: "Product Not Found" });
+        }
+
+        // ✅ Authorization check
+        if (
+            req.requester.type !== "admin" &&
+            req.requester._id.toString() !== product.seller.toString()
+        ) {
+            return res.status(401).json({ message: "Not Authorized to Update Product" });
+        }
+
+        // ✅ Build update object
+        const updatedData = {};
+
+        if (name) updatedData.name = name;
+        if (description) updatedData.description = description;
+        if (price) updatedData.price = price;
+        if (discountPrice) updatedData.discountPrice = discountPrice;
+        if (category) updatedData.category = category;
+
+        // ✅ Correct update query
+        const updated = await Product.updateOne(
+            { _id: productId },
+            { $set: updatedData }
+        );
+
+        res.status(200).json({
+            message: "Product updated successfully",
+            updated,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server Error" });
     }
-
-    // ✅ Authorization check
-    if (
-      req.requester.type !== "admin" &&
-      req.requester._id.toString() !== product.seller.toString()
-    ) {
-      return res.status(401).json({ message: "Not Authorized to Update Product" });
-    }
-
-    // ✅ Build update object
-    const updatedData = {};
-
-    if (name) updatedData.name = name;
-    if (description) updatedData.description = description;
-    if (price) updatedData.price = price;
-    if (discountPrice) updatedData.discountPrice = discountPrice;
-    if (category) updatedData.category = category;
-
-    // ✅ Correct update query
-    const updated = await Product.updateOne(
-      { _id: productId },
-      { $set: updatedData }
-    );
-
-    res.status(200).json({
-      message: "Product updated successfully",
-      updated,
-    });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
-  }
 };
 

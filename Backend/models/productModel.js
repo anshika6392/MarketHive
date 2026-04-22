@@ -17,11 +17,14 @@ const productSchema = new mongoose.Schema({
     discountPrice: {
         type: Number,
     },
-    images: [{
-        type: String,
-    }],
+    images: [
+        {
+            url: String,
+            public_id: String
+        }
+    ],
 
-    
+
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
