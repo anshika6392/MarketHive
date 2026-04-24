@@ -13,6 +13,7 @@
     "@auth0/auth0-react": "^2.11.0",
     "@tailwindcss/vite": "^4.2.1",
     "axios": "^1.13.6",
+    "dotenv": "^17.4.2",
     "preline": "^3.2.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

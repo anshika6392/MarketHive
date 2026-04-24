@@ -15,7 +15,7 @@ const Login = () => {
         e.preventDefault();
         // console.log("hahahahhaha")
         try {
-            const response = await axios.post("http://localhost:5000/api/user/login", { email, password });
+            const response = await axios.post("http://localhost:5000/api/user/login", { email, password },{ withCredentials: true });
             localStorage.setItem("token", response.data.data.token);
             console.log(response);
             toast.success("Login Successfull");

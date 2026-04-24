@@ -5,10 +5,18 @@ const protect = async (req, res, next) => {
     let token;
 
     // 1️⃣ Check Authorization Header
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {  // most imp for interviews
         console.log("Bearer Token Found")
         token = req.headers.authorization.split(" ")[1];
     }
+
+    // 2 req.cookies se token lena
+
+    if (!token && req.cookies.session_Token) {  //most most imp
+        console.log("cookie found");
+        token = req.cookies.session_Token;
+    }
+
 
     // 3️⃣ If no token
     if (!token) {

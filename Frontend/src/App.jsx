@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
-import Home from './pages/Home';
+import Home from './pages/User/Home';
 import Login from './auth/Login';
-import ProductDetails from './pages/ProductDetails';
-import Register from './pages/Register';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
 import SignUp from "./auth/SignUp";
-import GetAllUser from "./pages/GetAllUser";
+import ProductDetails from './pages/User/ProductDetails';
+import Cart from './pages/User/Cart';
+import GetAllUser from "./pages/admin/GetAllUser";
+import GetAllProduct from "./pages/User/GetAllProduct";
+
 
 const App = () => {
   return (
@@ -17,10 +17,8 @@ const App = () => {
       <Route path='/SignUp' element={<SignUp></SignUp>} />
       <Route path='/Cart' element={<Cart></Cart>} />
       <Route path='/productDetails' element={<ProductDetails></ProductDetails>} />
-      <Route path='/register' element={<Register></Register>} />
-      <Route path='/checkout' element={<Checkout></Checkout>} />
       <Route path='/getAllUsers' element={<GetAllUser></GetAllUser>} />
-
+      <Route path='/prod' element={<GetAllProduct></GetAllProduct>} />
     </Routes>
     // </BrowserRouter>
   )

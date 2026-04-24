@@ -156,6 +156,13 @@ export const login = async (req, res) => {
     if (p && user) { //11 : 1
         const token = generateToken(user._id);
 
+        res.cookie("session_Token",token,{
+            httpOnly:true,
+            secure:false,
+            maxAge:30 * 24 * 60 * 60 * 1000, // 30 days
+            sameSite:"lax"
+        })
+
         res.status(200).json({
             messege: "Login Succesfull", data: {
                 name: user.name,

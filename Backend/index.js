@@ -10,13 +10,16 @@ import cloud from './utils/cloudinary.js';
 dotenv.config();
 import upload from './middlewares/multer.js';
 import cloudinary from "cloudinary"
+import cookieParser from "cookie-parser"
 
 const app = express();
 const port = 5000;
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(cors({
-    origin: "*"
+    origin: "http://localhost:5173",
+    credentials: true
 }));
 connectDB();
 
