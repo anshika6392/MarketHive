@@ -1,21 +1,35 @@
 import React from 'react'
 import Dropdown from './Dropdown'
 import { useAuth0 } from "@auth0/auth0-react";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
 const Navbar = () => {
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
-    const {
-    user,
-    loginWithRedirect,
-    isAuthenticated,
-    logout,
-    getAccessTokenSilently,
-    isLoading,
-    error
-  } = useAuth0();
+
+    const url = import.meta.env.VITE_URL;
+
+    const [categories, setCategories] = useState([]);
+
+    const getAllCategories = async () => {
+        try {
+            const result = await axios.get(`${url}/api/category/getAllCategories`, { withCredentials: true });
+            // credentials= browser se cookie nikl ke request me attach ho jati h
+            console.log(result.data);
+            setCategories(result.data.data);
+
+        } catch (error) {
+            console.log("Error:", error);
+        }
+    };
+
+    useEffect(() => {
+        getAllCategories();
+    }, []);
 
     return (
         <div className='w-full fixed top-0 left-0  z-50'>
@@ -232,7 +246,6 @@ const Navbar = () => {
                                             </div>
                                         </div>
                                         End Dropdown */}
-                                        <Dropdown></Dropdown>
 
 
 
@@ -308,24 +321,27 @@ const Navbar = () => {
                                 <div className="my-2 md:my-0 md:mx-2">
                                     <div className="w-full h-px md:w-px md:h-4 bg-gray-100 md:bg-gray-300 dark:bg-neutral-700" />
                                 </div>
-                                {/* Button Group */}
+                                {/* Login Buttons  */}
                                 <div className=" flex flex-wrap items-center gap-x-1.5">
-                                    <a
-                                        className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                        href="#"
-                                    >
-                                        Sign in
-                                    </a>
 
-                                    {/* {true?<button>true button</button>:<h1>false button</h1>} */}
-                                    {isAuthenticated?<img src={user.picture}></img> : <a onClick={()=>navigate("/login")}
-                                        className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                    >
-                                        
-                                        Login
-                                    </a>
+                                    <div className=" flex flex-wrap items-center gap-x-1.5">
 
-                                     }
+                                        <a  onClick={() => navigate("/signIn")}
+                                            className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                            href="#"
+                                        >
+                                            Sign in
+                                        </a>
+
+                                        <a onClick={() => navigate("/login")}
+                                            className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                        >
+                                            Login
+                                        </a>
+
+                                    </div>
+
+
                                     <a
                                         className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600"
                                         href="#"
@@ -349,10 +365,12 @@ const Navbar = () => {
                 <div className="max-w-340 w-full mx-auto sm:flex sm:flex-row sm:justify-between sm:items-center sm:gap-x-3 py-3 px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center gap-x-3">
                         <div className="grow">
-                            <span className="font-semibold whitespace-nowrap ">
+                            <span className="font-semibold whitespace-nowrap hover:cursor-pointer hover:text-blue-500" onClick={() => navigate('/allProducts')}>
                                 Shop Now
                             </span>
                         </div>
+
+                        {/* dropdown button for small screens */}
                         <button
                             type="button"
                             className="hs-collapse-toggle sm:hidden py-1.5 px-2 inline-flex items-center font-medium text-xs  border text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden "
@@ -381,38 +399,16 @@ const Navbar = () => {
                         id="hs-nav-secondary"
                         className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block"
                     >
+                        {/* // Showing all the categories in NAVBAR */}
                         <div className="py-2 sm:py-0 flex flex-col sm:flex-row sm:justify-end gap-y-2 sm:gap-y-0 sm:gap-x-6">
-                            <a
-                                className="font-medium text-sm text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
-                                href="#"
-                            >
-                                Men
-                            </a>
-                            <a
-                                className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
-                                href="#"
-                            >
-                                Women
-                            </a>
-                            <a
-                                className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
-                                href="#"
-                            >
-                                Kids
-                            </a>
-                            <a
-                                className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
-                                href="#"
-                            >
-                                Beauty
-                            </a>
-                            <a
-                                className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden "
-                                href="#"
-                            >
-                                Home & Living
-                            </a>
+
+                            {categories?.map((cat, i) => (
+                                <a className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden " key={i}>{cat.name}</a>
+                            ))}
+
                         </div>
+
+
                     </div>
                 </div>
             </nav>

@@ -11,9 +11,9 @@ const GetAllUser = () => {
 
             // const token = localStorage.getItem('token'); // is step me hmne localStorage se token manga
 
-            // const config = {
+            // const config = {     // header se apna token bhejna ye ek purana method h aur less secure h 
             //     headers: {
-            //         Authorization: `Bearer ${token}`  // is step me hamne required authorization part ready kiya 
+            //         Authorization: `Bearer ${token}`  // is step me hamne required authorization header part ready kiya taaki hm ise req ke header part me bhej sake
             //     }
             // }
             

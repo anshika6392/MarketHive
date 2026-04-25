@@ -10,8 +10,8 @@ const Home = () => {
 
   const getAllCategories = async () => {
     try {
-      const result = await axios.get(`${url}/api/category/getAllCategories`,{ withCredentials: true });
-
+      const result = await axios.get(`${url}/api/category/getAllCategories`, { withCredentials: true });
+      // credentials= browser se cookie nikl ke request me attach ho jati h
       console.log(result.data);
       setCategories(result.data.data);
 
@@ -33,10 +33,17 @@ const Home = () => {
 
       <div>
         <h1>Categories</h1>
+        {/* <p>{categories[0]?.name}</p>
+        <p>{categories[1]?.name}</p>
+        <p>{categories[2]?.name}</p>
+        <p>{categories[3]?.name}</p>
+       */}
+        <div className='flex gap-4'>
 
-        {categories.map((cat, i) => (
-          <div key={i}>{cat.name}</div>
-        ))}
+          {categories.map((cat, i) => (
+            <div key={i}>{cat.name}</div>
+          ))}
+        </div>
       </div>
 
     </div>
@@ -44,3 +51,4 @@ const Home = () => {
 };
 
 export default Home;
+

@@ -57,7 +57,7 @@ const Login = () => {
 
                 <p className="text-sm text-center text-gray-500">
                     Don't have an account?{" "}
-                    <span className="text-blue-500 cursor-pointer hover:underline" onClick={()=>{navigate("/SignUp")}} >
+                    <span className="text-blue-500 cursor-pointer hover:underline" onClick={()=>{navigate("/signIn")}} >
                         Sign up
                     </span>
                 </p>
@@ -69,3 +69,4 @@ const Login = () => {
 }
 
 export default Login
+

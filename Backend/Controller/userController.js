@@ -156,11 +156,11 @@ export const login = async (req, res) => {
     if (p && user) { //11 : 1
         const token = generateToken(user._id);
 
-        res.cookie("session_Token",token,{
-            httpOnly:true,
-            secure:false,
-            maxAge:30 * 24 * 60 * 60 * 1000, // 30 days
-            sameSite:"lax"
+        res.cookie("session_Token", token, {
+            httpOnly: true,      // agr true h to cookie ko frontend access nhi kr sakta h
+            secure: false,
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            sameSite: "lax"
         })
 
         res.status(200).json({
@@ -174,5 +174,11 @@ export const login = async (req, res) => {
     }
 }
 
+export const checkLogin = async (req, res) => {
+    if (!req.requester) {
+        return res.status(403).json({ messagw: "Requester not present" });
+    }
 
+    res.status(200).json({success: true,user: req.requester});
+}
 
