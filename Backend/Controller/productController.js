@@ -17,7 +17,7 @@ export const createProduct = async (req, res) => {
 
         // 🚀 parallel upload (fast)
         const uploads = files.map(file =>
-            cloudinary.uploader.upload(file.path,{folder:"MarketHive"})
+            cloudinary.uploader.upload(file.path, { folder: "MarketHive" })
         );
 
         const uploadedImages = await Promise.all(uploads);
@@ -200,3 +200,21 @@ export const updateProduct = async (req, res) => {
     }
 };
 
+// getProductByCategory
+
+// random products from all category max 20
+export const getRandomProducts = async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit) || 8; // default 5
+
+        const products = await Product.aggregate([  // functipn to get random product
+            { $sample: { size: limit } }
+        ]);
+
+        return res.status(200).json({ message: "product fetched", count: products.length, data: products });
+
+    } catch (error) {
+        console.error("Random Products Error:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};

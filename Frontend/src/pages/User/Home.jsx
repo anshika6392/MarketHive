@@ -6,43 +6,103 @@ const Home = () => {
 
   const url = import.meta.env.VITE_URL;
 
-  const [categories, setCategories] = useState([]);
+  const [randomProducts, setRandomProducts] = useState([]);
 
-  const getAllCategories = async () => {
+  const getRandomProducts = async () => {
     try {
-      const result = await axios.get(`${url}/api/category/getAllCategories`, { withCredentials: true });
-      // credentials= browser se cookie nikl ke request me attach ho jati h
-      console.log(result.data);
-      setCategories(result.data.data);
-
+      const result = await axios.get(`${url}/api/product/getRandomProducts`);
+      setRandomProducts(result.data.data);
+      console.log(result.data.data)
     } catch (error) {
-      console.log("Error:", error);
+      console.log(error)
     }
-  };
+  }
+
 
   useEffect(() => {
-    getAllCategories();
+    getRandomProducts();
   }, []);
 
   return (
-    <div className='h-screen w-full pt-24'>
+    <div className='h-screen pt-24 bg-white' >
 
-      <div className='flex justify-center items-center'>
+      {/* slider */}
+      <div>
         <Slide />
       </div>
 
-      <div>
-        <h1>Categories</h1>
-        {/* <p>{categories[0]?.name}</p>
-        <p>{categories[1]?.name}</p>
-        <p>{categories[2]?.name}</p>
-        <p>{categories[3]?.name}</p>
-       */}
-        <div className='flex gap-4'>
+      <div className='flex flex-col items-center'>
+        <div className='w-[85%]'>
+          {/*  advertisement */}
+          <img className='rounded-2xl' src="https://rukminim2.flixcart.com/fk-p-flap/3140/700/image/a77b1968d2473985.jpg?q=60" alt="error" />
 
-          {categories.map((cat, i) => (
-            <div key={i}>{cat.name}</div>
-          ))}
+          {/* suggestion */}
+          <div>
+            <h1 className='text-2xl p-2 mt-4 mb-4'>
+              Suggested For You
+            </h1>
+
+            {/* <div className='flex border border-red-500'>
+              {randomProducts.map((p, i) => {
+                return (
+                  <div key={i} className='border border-blue-500 m-2 p-2 flex flex-col w-[50%]'>
+                    
+                      <h1>{p.name}</h1>
+                      <h2>{p.price}</h2>
+                      <h2>{p.description}</h2>
+                      <img src={p?.images[0]?.url} alt="" />                        
+                  </div>
+
+                )
+              })}
+            </div> */}
+
+            <div className="w-full flex justify-center px-3 sm:px-6">
+              <div className="w-full max-w-[1400px] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+
+                {randomProducts.map((p, i) => (
+                  <div
+                    key={i}
+                    className="rounded-2xl overflow-hidden backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg hover:scale-105 transition-all duration-300 flex flex-col justify-between"
+                  >
+                    {/* Image */}
+                    <div className="relative h-[140px] sm:h-[160px] md:h-[180px] w-full overflow-hidden">
+                      <img
+                        src={p?.images[0]?.url}
+                        alt={p.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-3 sm:p-4 flex flex-col gap-2 flex-grow">
+                      <h1 className="text-xs sm:text-sm font-semibold line-clamp-2">
+                        {p.name}
+                      </h1>
+
+                      <h2 className="text-sm sm:text-lg font-bold text-green-600">
+                        ₹{p.price}
+                      </h2>
+
+                      <p className="text-[10px] sm:text-xs text-gray-600 line-clamp-2">
+                        {p.description}
+                      </p>
+                    </div>
+
+                    {/* Button */}
+                    <div className="p-3 pt-0">
+                      <button className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition">
+                        Buy Now
+                      </button>
+                    </div>
+
+                  </div>
+                ))}
+
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 

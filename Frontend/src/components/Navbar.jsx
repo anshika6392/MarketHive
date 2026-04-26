@@ -5,16 +5,25 @@ import { useNavigate } from "react-router-dom"
 import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
 
     const navigate = useNavigate();
-
-
     const url = import.meta.env.VITE_URL;
 
-    const [categories, setCategories] = useState([]);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const checkLogin = async () => {
+        try {
+            const result = await axios.post(`${url}/api/user/checkLogin`, {}, { withCredentials: true });
+            setLoggedIn(!loggedIn);
+        } catch (error) {
+            toast.error("Login to continue")
+            console.log(error);
+        }
+    }
 
+    const [categories, setCategories] = useState([]);
     const getAllCategories = async () => {
         try {
             const result = await axios.get(`${url}/api/category/getAllCategories`, { withCredentials: true });
@@ -28,13 +37,15 @@ const Navbar = () => {
     };
 
     useEffect(() => {
+        checkLogin();
         getAllCategories();
     }, []);
 
     return (
-        <div className='w-full fixed top-0 left-0  z-50'>
+        <div className='w-full fixed top-0 left-0  z-50 bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-xl'>
+
             {/* ========== HEADER ========== */}
-            <header className="   flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full bg-white border-b border-gray-200">
+            <header className="   flex flex-wrap  md:justify-start md:flex-nowrap z-50 w-full border-b border-gray-200">
                 <nav className="relative max-w-340 w-full mx-auto md:flex md:items-center md:justify-between md:gap-3 py-2 px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center gap-x-1">
                         <a
@@ -89,7 +100,8 @@ const Navbar = () => {
                         </button>
                         {/* End Collapse Button */}
                     </div>
-                    {/* Collapse */}
+
+
                     <div
                         id="hs-header-base"
                         className="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow md:block "
@@ -97,6 +109,7 @@ const Navbar = () => {
                     >
                         <div className="overflow-hidden overflow-y-auto max-h-[75vh] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 ">
                             <div className="py-2 md:py-0  flex flex-col md:flex-row md:items-center gap-0.5 md:gap-1">
+
                                 <div className="grow">
                                     <div className="flex flex-col md:flex-row md:justify-end md:items-center gap-0.5 md:gap-1">
                                         <a
@@ -318,26 +331,29 @@ const Navbar = () => {
                                         </a>
                                     </div>
                                 </div>
+
                                 <div className="my-2 md:my-0 md:mx-2">
                                     <div className="w-full h-px md:w-px md:h-4 bg-gray-100 md:bg-gray-300 dark:bg-neutral-700" />
                                 </div>
+
                                 {/* Login Buttons  */}
                                 <div className=" flex flex-wrap items-center gap-x-1.5">
 
                                     <div className=" flex flex-wrap items-center gap-x-1.5">
 
-                                        <a  onClick={() => navigate("/signIn")}
+                                        {loggedIn ? <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24"><path fill="#000" d="M12 19.2c-2.5 0-4.71-1.28-6-3.2c.03-2 4-3.1
+                                         6-3.1s5.97 1.1 6 3.1a7.23 7.23 0 0 1-6 3.2M12 5a3 3 0 0 1 3 3a3 3 0 0 1-3 3a3 3 0 0 1-3-3a3 3 0 0 1 3-3m0-3A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10c0-5.53-4.5-10-10-10" /></svg> : <div className=" flex flex-wrap items-center gap-x-1.5"><a onClick={() => navigate("/signIn")}
                                             className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
                                             href="#"
                                         >
                                             Sign in
                                         </a>
 
-                                        <a onClick={() => navigate("/login")}
-                                            className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
-                                        >
-                                            Login
-                                        </a>
+                                            <a onClick={() => navigate("/login")}
+                                                className="py-1.75 px-2.5 inline-flex items-center font-medium text-sm rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-neutral-800 focus:outline-hidden focus:bg-gray-100 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
+                                            >
+                                                Login
+                                            </a></div>}
 
                                     </div>
 
@@ -353,15 +369,13 @@ const Navbar = () => {
                             </div>
                         </div>
                     </div>
-                    {/* End Collapse */}
                 </nav>
             </header>
             {/* ========== END HEADER ========== */}
 
 
-
             {/* Nav */}
-            <nav className="text-black ">
+            <nav className="text-black">
                 <div className="max-w-340 w-full mx-auto sm:flex sm:flex-row sm:justify-between sm:items-center sm:gap-x-3 py-3 px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center gap-x-3">
                         <div className="grow">
@@ -413,6 +427,8 @@ const Navbar = () => {
                 </div>
             </nav>
             {/* End Nav */}
+
+
         </div>
 
     )

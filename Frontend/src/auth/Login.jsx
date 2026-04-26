@@ -5,8 +5,10 @@ import toast from "react-hot-toast"
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const url = import.meta.env.VITE_URL;
+    console.log(url)
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,13 +17,13 @@ const Login = () => {
         e.preventDefault();
         // console.log("hahahahhaha")
         try {
-            const response = await axios.post("http://localhost:5000/api/user/login", { email, password },{ withCredentials: true });
+            const response = await axios.post(`${url}/api/user/login`, { email, password }, { withCredentials: true });
             localStorage.setItem("token", response.data.data.token);
             console.log(response);
             toast.success("Login Successfull");
             navigate('/');
         } catch (error) {
-            console.log("Err : ",error);
+            console.log("Err : ", error);
             toast.error(error.response.data.message)
         }
     }
@@ -57,7 +59,7 @@ const Login = () => {
 
                 <p className="text-sm text-center text-gray-500">
                     Don't have an account?{" "}
-                    <span className="text-blue-500 cursor-pointer hover:underline" onClick={()=>{navigate("/signIn")}} >
+                    <span className="text-blue-500 cursor-pointer hover:underline" onClick={() => { navigate("/signIn") }} >
                         Sign up
                     </span>
                 </p>
