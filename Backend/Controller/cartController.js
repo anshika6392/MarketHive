@@ -18,9 +18,11 @@ export const addToCart = async (req, res) => {
 
         // 👉 If cart doesn't exist → create new
         if (!cart) {
-            cart = new Cart({   
+            cart = new Cart({
                 user: userId,
                 items: [{
+                    name: product.name,
+                    img: product.images[0].url,
                     product: productId,
                     quantity: 1,
                     price: product.price
@@ -44,6 +46,8 @@ export const addToCart = async (req, res) => {
         } else {
             // 👉 New product → push
             cart.items.push({
+                name: product.name,
+                img: product.images[0].url,
                 product: productId,
                 quantity: 1,
                 price: product.price
@@ -100,18 +104,18 @@ export const deleteItemFromCart = async (req, res) => {
 
 }
 
-export const getCartData=async(req,res)=>{
+export const getCartData = async (req, res) => {
     try {
-        
-        const userId=req.requester._id;
-        
+
+        const userId = req.requester._id;
+
         const cart = await Cart.findOne({ user: userId });
-       if (!cart) {
-           return res.status(401).json({ message: "there is no cart" });
-       }
-       
-       return res.status(200).json({message:"data fetched successfully",cart});
+        if (!cart) {
+            return res.status(200).json({ message: "there is no cart" });
+        }
+
+        return res.status(200).json({ message: "data fetched successfully", cart });
     } catch (error) {
-        return res.status(501).json({message:error});
+        return res.status(501).json({ message: error });
     }
 }

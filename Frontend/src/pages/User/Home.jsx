@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Slide from '../../components/Slide';
+import Footer from '../../components/Footer';
 
 const Home = () => {
 
@@ -70,7 +71,7 @@ const Home = () => {
                       <img
                         src={p?.images[0]?.url}
                         alt={p.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                       />
                     </div>
 
@@ -105,6 +106,8 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      <Footer/>
 
     </div>
   );

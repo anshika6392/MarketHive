@@ -218,3 +218,8 @@ export const getRandomProducts = async (req, res) => {
         res.status(500).json({ message: "Server Error" });
     }
 };
+
+export const getProductById=async(req,res)=>{
+    
+}
+

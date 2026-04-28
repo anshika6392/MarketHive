@@ -28,7 +28,7 @@ const Navbar = () => {
         try {
             const result = await axios.get(`${url}/api/category/getAllCategories`, { withCredentials: true });
             // credentials= browser se cookie nikl ke request me attach ho jati h
-            console.log(result.data);
+            // console.log(result.data);
             setCategories(result.data.data);
 
         } catch (error) {

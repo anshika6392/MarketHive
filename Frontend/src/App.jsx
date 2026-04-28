@@ -5,7 +5,7 @@ import SignUp from "./auth/SignUp";
 import ProductDetails from './pages/User/ProductDetails';
 import Cart from './pages/User/Cart';
 import GetAllUser from "./pages/admin/GetAllUser";
-import GetAllProduct from "./pages/User/GetAllProduct";
+import GetAllProduct from "./pages/User/AllProducts";
 
 
 const App = () => {
