@@ -200,12 +200,12 @@ export const updateProduct = async (req, res) => {
     }
 };
 
-// getProductByCategory
 
 // random products from all category max 20
 export const getRandomProducts = async (req, res) => {
     try {
         const limit = parseInt(req.query.limit) || 8; // default 5
+        // array me 8 size k hi value jaiyegi
 
         const products = await Product.aggregate([  // functipn to get random product
             { $sample: { size: limit } }
@@ -219,7 +219,41 @@ export const getRandomProducts = async (req, res) => {
     }
 };
 
-export const getProductById=async(req,res)=>{
-    
+export const getProductById = async (req, res) => {
+
+    const { productId } = req.params;
+    if (!productId) {
+        return res.status(200).json({ message: "productId not Found" });
+    }
+
+    try {
+        const data = await Product.findById(productId);
+
+        if (!data) {
+            return res.status(200).json({ message: "product not Found with this ID" });
+        }
+
+        return res.status(200).json({ message: "product found", data });
+
+    } catch (error) {
+        return res.status(500).json({ message: "something went wrong", error });
+    }
 }
 
+// getProductByCategory
+export const getProductByCategory = async (req, res) => {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+        return res.status(200).json({ message: "categoryId not Found" });
+    }
+
+    try {
+        const data = await Product.find({ category: categoryId });
+        return res.status(200).json({ message: "products fetched by category", data })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "something went wrong", error });
+    }
+
+}

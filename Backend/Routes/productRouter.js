@@ -1,5 +1,5 @@
 import express from 'express'
-import { createProduct, deleteManyProducts, deleteProduct, getAllProducts, getAllProductsBySeller, getRandomProducts, updateProduct } from '../controller/productController.js'
+import { createProduct, deleteManyProducts, deleteProduct, getAllProducts, getAllProductsBySeller, getProductByCategory, getProductById, getRandomProducts, updateProduct } from '../controller/productController.js'
 import protect from '../middlewares/authMiddleWare.js';
 import upload from '../middlewares/multer.js';
 
@@ -14,5 +14,6 @@ Router.get('/getAllProducts', getAllProducts);
 Router.get('/getAllProductsBySeller/:sellerId', protect, getAllProductsBySeller);
 Router.put('/updateProduct/:productId', protect, updateProduct);
 Router.get('/getRandomProducts', getRandomProducts);
-
+Router.get('/getProductById/:productId',getProductById);
+Router.get('/getProductByCategory/:categoryId',getProductByCategory);
 export default Router;

@@ -306,9 +306,12 @@ const Navbar = () => {
                                             </svg>
                                             WishList
                                         </a>
+
                                         <a
-                                            className="p-2 flex items-center text-sm text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden "
-                                            href="#"
+                                            className="p-2 flex items-center text-sm text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden " 
+                                            href=""
+                                            onClick={()=>navigate('/cart')}
+
                                         >
                                             <svg
                                                 className="shrink-0 size-4 me-3 md:me-2 block md:hidden"

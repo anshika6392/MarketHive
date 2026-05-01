@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Slide from '../../components/Slide';
 import Footer from '../../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
 
   const url = import.meta.env.VITE_URL;
+  const navigate = useNavigate();
 
   const [randomProducts, setRandomProducts] = useState([]);
 
@@ -59,12 +61,14 @@ const Home = () => {
             </div> */}
 
             <div className="w-full flex justify-center px-3 sm:px-6">
-              <div className="w-full max-w-[1400px] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+              <div className="w-full max-w-[1400px] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" >
 
                 {randomProducts.map((p, i) => (
                   <div
                     key={i}
-                    className="rounded-2xl overflow-hidden backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg hover:scale-105 transition-all duration-300 flex flex-col justify-between"
+                    className="rounded-2xl overflow-hidden backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg hover:scale-105 transition-all duration-300 flex flex-col justify-between " 
+                    onClick={() => navigate(`/productDetails/${p._id}`) // navigating to productDetails page by setting the productId to PATH (url)
+                  }
                   >
                     {/* Image */}
                     <div className="relative h-[140px] sm:h-[160px] md:h-[180px] w-full overflow-hidden">
@@ -92,7 +96,7 @@ const Home = () => {
 
                     {/* Button */}
                     <div className="p-3 pt-0">
-                      <button className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition">
+                      <button className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition" onClick={() => navigate(`/productDetails/${p._id}`)}>
                         Buy Now
                       </button>
                     </div>
@@ -107,7 +111,7 @@ const Home = () => {
         </div>
       </div>
 
-      <Footer/>
+      <Footer />
 
     </div>
   );
