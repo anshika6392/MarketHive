@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import CategoryWisePage from '../pages/User/CategoryWisePage';
 
 const Navbar = () => {
 
@@ -23,6 +24,8 @@ const Navbar = () => {
         }
     }
 
+    const [products, setProducts] = useState([]);
+
     const [categories, setCategories] = useState([]);
     const getAllCategories = async () => {
         try {
@@ -36,10 +39,26 @@ const Navbar = () => {
         }
     };
 
+
     useEffect(() => {
         checkLogin();
         getAllCategories();
     }, []);
+
+    const handleCategory = async (categoryId) => {
+        const res = await axios.get(`http://localhost:5000/api/products/${categoryId}`);
+
+        setProducts(res.data);
+    }
+
+
+
+
+
+
+
+
+
 
     return (
         <div className='w-full fixed top-0 left-0  z-50 bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg rounded-xl'>
@@ -50,7 +69,7 @@ const Navbar = () => {
                     <div className="flex justify-between items-center gap-x-1">
                         <a
                             className="flex-none font-semibold text-xl text-black focus:outline-hidden focus:opacity-80"
-                            href="#"
+                            href="/"
                             aria-label="Brand"
                         >
                             MarketHive
@@ -285,7 +304,7 @@ const Navbar = () => {
                                         </a>
                                         <a
                                             className="p-2 flex items-center text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden "
-                                            href="#"
+                                            onClick={()=>navigate('/order')}
                                         >
                                             <svg
                                                 className="shrink-0 size-4 me-3 md:me-2 block md:hidden"
@@ -304,13 +323,13 @@ const Navbar = () => {
                                                 <path d="M22 13a18.15 18.15 0 0 1-20 0" />
                                                 <rect width={20} height={14} x={2} y={6} rx={2} />
                                             </svg>
-                                            WishList
+                                            Order 
                                         </a>
 
                                         <a
-                                            className="p-2 flex items-center text-sm text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden " 
+                                            className="p-2 flex items-center text-sm text-black hover:bg-gray-800 hover:dark:text-white rounded-lg focus:outline-hidden "
                                             href=""
-                                            onClick={()=>navigate('/cart')}
+                                            onClick={() => navigate('/cart')}
 
                                         >
                                             <svg
@@ -361,7 +380,7 @@ const Navbar = () => {
                                     </div>
 
 
-                                    <a
+                                    <a onClick={()=> navigate("/seller/login")}
                                         className="py-2 px-2.5 inline-flex items-center font-medium text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-hidden focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:bg-blue-600"
                                         href="#"
                                     >
@@ -420,7 +439,15 @@ const Navbar = () => {
                         <div className="py-2 sm:py-0 flex flex-col sm:flex-row sm:justify-end gap-y-2 sm:gap-y-0 sm:gap-x-6">
 
                             {categories?.map((cat, i) => (
-                                <a className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden " key={i}>{cat.name}</a>
+
+                                <a onClick={() => {
+                                    navigate('/categoryWisePage', {
+                                        state: {
+                                            categoryId: cat._id
+                                        }
+                                    })
+                                }} 
+                                className="font-medium text-sm  text-black hover:text-blue-700 rounded-lg focus:outline-hidden cursor-pointer" key={i}>{cat.name}</a>
                             ))}
 
                         </div>
@@ -438,3 +465,5 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+

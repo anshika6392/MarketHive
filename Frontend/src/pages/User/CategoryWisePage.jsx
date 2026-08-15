@@ -1,34 +1,29 @@
 import axios from 'axios';
-import React, { use, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useLocation } from "react-router-dom";
+
+const CategoryWisePage = (state) => {
+
+    const [products,setProduct]=useState([]);
 
 
-const GetAllProduct = () => {
 
 
+    const location = useLocation();
+    console.log(location.state);
 
-    const navigate=useNavigate();
-    const [products, setProducts] = useState([]);
 
-    const getAllProducts = async () => {
-        try {
-            const response = await axios.get(
-                "http://localhost:5000/api/product/getAllProducts"
-            );
+    const getProductsByCategory = async () => {
 
-            console.log(response.data);
-            setProducts(response.data.products);
-
-        } catch (error) {
-            console.log("Error:", error);
-        }
-    };
+        const data = await axios.get(`http://localhost:5000/api/category/getcategoryWiseProducts/${location.state.categoryId}`)
+        console.log("-->", data.data.products);
+         setProduct(data.data.products);
+    }
 
     useEffect(() => {
-        getAllProducts();
-    }, []);
+        getProductsByCategory();
+    }, [location.state])
 
-    
 
     return (
         <div className="min-h-screen bg-white py-10 px-4 sm:px-6 lg:px-10 mt-26">
@@ -88,9 +83,7 @@ const GetAllProduct = () => {
                                     Cart
                                 </button>
 
-                                <button className="w-1/2 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition"
-                                    onClick={()=>navigate(`/productDetails/${p._id}`)}
-                                >
+                                <button className="w-1/2 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition">
                                     Buy Now
                                 </button>
 
@@ -104,7 +97,7 @@ const GetAllProduct = () => {
             </div>
 
         </div>
-    );
-};
+    )
+}
 
-export default GetAllProduct;
+export default CategoryWisePage

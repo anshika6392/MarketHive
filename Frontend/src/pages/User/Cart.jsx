@@ -1,10 +1,13 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
 
 const Cart = () => {
 
   const url = import.meta.env.VITE_URL;
+  const navigate=useNavigate();
 
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,15 +26,23 @@ const Cart = () => {
     }
   }
 
-  const increseItemInCart=async(productId)=>{
+  const increseItemInCart = async (productId) => {
     try {
-      await axios.post(`${url}/api/cart/addToCart/${productId}`,{},{withCredentials:true});
+      await axios.post(`${url}/api/cart/addToCart/${productId}`, {}, { withCredentials: true });
       getCartData();
       toast.success("quantity Incresed");
     } catch (error) {
       console.log(error)
     }
   }
+
+  const decreaseItemInCart = async (productId) => {
+    try {
+      await axios.post(`${url}/api/cart/decreaseItem/${productId}`, {}, { withCredentials: true });
+      getCartData();
+    } catch (error) { console.log(error); }
+  }
+
 
   useEffect(() => {
     getCartData();
@@ -125,7 +136,7 @@ const Cart = () => {
 
                         <div className='flex items-center gap-3'>
 
-                          <button className='bg-gray-200 px-3 py-1 rounded-lg text-lg'onClick={()=>{}}>
+                          <button className='bg-gray-200 px-3 py-1 rounded-lg text-lg' onClick={()=>decreaseItemInCart(item.product)}>
                             -
                           </button>
 
@@ -133,7 +144,7 @@ const Cart = () => {
                             {item.quantity}
                           </span>
 
-                          <button className='bg-black text-white px-3 py-1 rounded-lg text-lg' onClick={()=>increseItemInCart(item.product)}>
+                          <button className='bg-black text-white px-3 py-1 rounded-lg text-lg' onClick={() => increseItemInCart(item.product)}>
                             +
                           </button>
 
@@ -187,7 +198,7 @@ const Cart = () => {
               </div>
 
 
-              <button className='w-full bg-black text-white py-3 rounded-xl mt-8 hover:bg-gray-800 transition'>
+              <button className='w-full bg-black text-white py-3 rounded-xl mt-8 hover:bg-gray-800 transition' onClick={()=>navigate('/checkout')}>
                 Proceed To Checkout
               </button>
 

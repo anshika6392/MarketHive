@@ -1,4 +1,5 @@
 import categoryModel from "../models/categoryModel.js";
+import Products from "../models/productModel.js"
 
 export const createCategory = async (req, res) => {
 
@@ -47,10 +48,29 @@ export const getAllCategory = async (req, res) => {
     try {
 
         const data = await categoryModel.find();
-        return res.status(200).json({message:"category fetched",data});
+        return res.status(200).json({ message: "category fetched", data });
 
 
     } catch (error) {
-     return res.stataus(501).json({message:"failed to fetch category"});
+        return res.stataus(501).json({ message: "failed to fetch category" });
+    }
+}
+
+
+export const getcategoryWiseProducts = async (req, res) => {
+    try {
+        const { categoryId } = req.params;
+
+        console.log("--->",categoryId)
+
+        const products=await Products.find({category: categoryId});
+
+        console.log(products)
+
+        return res.status(200).json({ message: "products fetched successfully", products })
+
+    } catch (error) {
+        return res.status(501).json({ message: "Failed to fetch products", error });
+
     }
 }

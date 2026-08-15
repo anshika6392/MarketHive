@@ -6,7 +6,11 @@ import ProductDetails from './pages/User/ProductDetails';
 import Cart from './pages/User/Cart';
 import GetAllUser from "./pages/admin/GetAllUser";
 import GetAllProduct from "./pages/User/AllProducts";
-
+import CategoryWisePage from "./pages/User/CategoryWisePage";
+import BuyNow from "./pages/User/BuyNow";
+import OrderDetails from "./pages/User/OrderDetails";
+import SellerLogin from "./pages/seller/SellerLogin";
+import Checkout from "./pages/User/Checkout";
 
 const App = () => {
   return (
@@ -19,6 +23,13 @@ const App = () => {
       <Route path='/productDetails/:productId' element={<ProductDetails></ProductDetails>} />
       <Route path='/getAllUsers' element={<GetAllUser></GetAllUser>} />
       <Route path='/allProducts' element={<GetAllProduct></GetAllProduct>} />
+      <Route path='/categoryWisePage' element={<CategoryWisePage></CategoryWisePage>} />
+      <Route path='/buyNow/:productId' element={<BuyNow></BuyNow>} />
+      <Route path='/order' element={<OrderDetails></OrderDetails>} />
+      <Route path='/checkout' element={<Checkout />} />
+      <Route path='/seller/login' element={<SellerLogin></SellerLogin >} />
+
+
     </Routes>
     // </BrowserRouter>
   )
