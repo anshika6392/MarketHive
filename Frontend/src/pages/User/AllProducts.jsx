@@ -5,15 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 const GetAllProduct = () => {
 
+    const url = import.meta.env.VITE_URL;
 
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
 
     const getAllProducts = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:5000/api/product/getAllProducts"
+                `${url}/api/product/getAllProducts`
             );
 
             console.log(response.data);
@@ -28,7 +29,7 @@ const GetAllProduct = () => {
         getAllProducts();
     }, []);
 
-    
+
 
     return (
         <div className="min-h-screen bg-white py-10 px-4 sm:px-6 lg:px-10 mt-26">
@@ -89,7 +90,7 @@ const GetAllProduct = () => {
                                 </button>
 
                                 <button className="w-1/2 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition"
-                                    onClick={()=>navigate(`/productDetails/${p._id}`)}
+                                    onClick={() => navigate(`/productDetails/${p._id}`)}
                                 >
                                     Buy Now
                                 </button>

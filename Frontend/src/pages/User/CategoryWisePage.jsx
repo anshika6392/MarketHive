@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 
 const CategoryWisePage = (state) => {
 
-    const [products,setProduct]=useState([]);
+    const [products, setProduct] = useState([]);
+    const url = import.meta.env.VITE_URL;
 
 
 
@@ -15,9 +16,9 @@ const CategoryWisePage = (state) => {
 
     const getProductsByCategory = async () => {
 
-        const data = await axios.get(`http://localhost:5000/api/category/getcategoryWiseProducts/${location.state.categoryId}`)
+        const data = await axios.get(`${url}/api/category/getcategoryWiseProducts/${location.state.categoryId}`)
         console.log("-->", data.data.products);
-         setProduct(data.data.products);
+        setProduct(data.data.products);
     }
 
     useEffect(() => {
