@@ -4,6 +4,9 @@ import userRouter from './routes/userRouter.js'
 import productRouter from './routes/productRouter.js'
 import cartRouter from './routes/cartRouter.js'
 import categoryRouter from './routes/categoryRouter.js'
+import addressRouter from './routes/addressRouter.js'
+import paymentRouter from './routes/razorPayRouter.js'
+import orderRouter from './routes/orderRouter.js'
 import cors from 'cors';
 import dotenv from "dotenv"
 import cloud from './utils/cloudinary.js';
@@ -32,7 +35,9 @@ app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/category", categoryRouter);
-
+app.use("/api/address",addressRouter)
+app.use("/api/payment",paymentRouter)
+app.use("/api/Order",orderRouter)
 
 app.post("/api/multer", upload.array('files', 5), async (req, res) => {
 
@@ -59,6 +64,7 @@ app.post("/api/multer", upload.array('files', 5), async (req, res) => {
         res.status(500).json("Error uploading files");
     }
 });
+
 
 
 app.listen(port, () => {

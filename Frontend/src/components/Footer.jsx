@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="col-span-full hidden lg:col-span-1 lg:block">
                     <a className="flex-none font-semibold text-xl text-foreground focus:outline-hidden focus:opacity-80" href="#" aria-label="Brand">Brand</a>
                     <p className="mt-3 text-xs sm:text-sm text-muted-foreground-2">
-                        © 2026 Preline Labs.
+                        © 2026 MarketHive.
                     </p>
                 </div>
                 {/* End Col */}

@@ -119,3 +119,31 @@ export const getCartData = async (req, res) => {
         return res.status(501).json({ message: error });
     }
 }
+
+export const decreaseItemInCart = async (req, res) => {
+    const { productId } = req.params;
+    const userId = req.requester._id;
+
+    try {
+        const cart = await Cart.findOne({ user: userId });
+        if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+        const itemIndex = cart.items.findIndex(item => item.product.toString() === productId);
+        if (itemIndex === -1) return res.status(404).json({ message: "Item not in cart" });
+
+        if (cart.items[itemIndex].quantity > 1) {
+            cart.items[itemIndex].quantity -= 1;
+        } else {
+            cart.items.splice(itemIndex, 1);
+        }
+
+        let total = 0;
+        cart.items.forEach(item => total += item.quantity * item.price);
+        cart.totalPrice = total;
+
+        await cart.save();
+        return res.status(200).json({ message: "Quantity decreased", cart });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+}

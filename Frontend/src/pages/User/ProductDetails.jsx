@@ -22,10 +22,8 @@ const ProductDetails = () => {
       const response = await axios.get(`${url}/api/product/getProductById/${productId}`);
       setProductData(response.data.data);
       setMainImg(response.data.data?.images?.[0].url);
-
       // setCategoryId(response.data.data.category); // extracting categoryId from our response
-
-      fetchProductBYCategory(response.data.data.category); 
+      fetchProductBYCategory(response.data.data.category);
     } catch (error) {
       console.log(error);
     }
@@ -34,15 +32,14 @@ const ProductDetails = () => {
   useEffect(() => {
     getProductById()
     // fetchProductBYCategory()   // is trh call karne pe hamare doni functions sath me call ho jaa rhe the jis se hame category Id nhi mil paa rhi thi
-  }, []);
+  }, [productId]);
 
 
   // getting all related products of current produts category
   const fetchProductBYCategory = async (categoryId) => {
     try {
       const response = await axios.get(`${url}/api/product/getProductByCategory/${categoryId}`);
-      setProductsCategoryWise(response.data);
-
+      setProductsCategoryWise(response.data.data)
     } catch (error) {
       toast.error("no related items");
       console.log(error);
@@ -67,6 +64,8 @@ const ProductDetails = () => {
 
     <div className='bg-white text-black px-6 py-12 mt-26'>
 
+
+      {/* main product details */}
       <div className='max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12'>
 
         {/* LEFT SIDE IMAGE */}
@@ -127,7 +126,11 @@ const ProductDetails = () => {
               Add To Cart
             </button>
 
-            <button className='border-2 border-black px-8 py-3 rounded-xl hover:bg-black hover:text-white transition-all duration-300'>
+            <button
+              className='border-2 border-black px-8 py-3 rounded-xl hover:bg-black hover:text-white transition-all duration-300'
+              onClick={() => navigate(`/BuyNow/${productData._id}`)}
+            >
+
               Buy Now
             </button>
 
@@ -137,10 +140,59 @@ const ProductDetails = () => {
 
       </div>
 
-      <div>
-       {productsCategoryWise?.map((key,i)=>{
-         return (<h1>{key.name}</h1>)
-       })}
+
+      {/* Simmilar product list */}
+
+      <h1 className='text-2xl font-bold mt-10'>Recommended Products : </h1>
+      <div className="w-full flex justify-center px-3 sm:px-6 mt-10">
+
+        <div className="w-full max-w-[1400px] grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6" >
+
+          {productsCategoryWise?.map((p, i) => {
+            return (
+              <div>
+                <div
+                  key={i}
+                  className="rounded-2xl overflow-hidden backdrop-blur-lg bg-white/10 border border-white/20 shadow-lg hover:scale-105 transition-all duration-300 flex flex-col justify-between "
+                >
+                  {/* Image */}
+                  <div className="relative h-[140px] sm:h-[160px] md:h-[180px] w-full overflow-hidden">
+                    <img
+                      src={p?.images[0]?.url}
+                      alt={p.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-3 sm:p-4 flex flex-col gap-2 flex-grow">
+                    <h1 className="text-xs sm:text-sm font-semibold line-clamp-2">
+                      {p.name}
+                    </h1>
+
+                    <h2 className="text-sm sm:text-lg font-bold text-green-600">
+                      ₹{p.price}
+                    </h2>
+
+                    <p className="text-[10px] sm:text-xs text-gray-600 line-clamp-2">
+                      {p.description}
+                    </p>
+                  </div>
+
+                  {/* Button */}
+                  <div className="p-3 pt-0">
+                    <button
+                      className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition"
+                      onClick={() => navigate(`/productDetails/${p._id}`)}
+                    >
+                      Buy Now
+                    </button>
+                  </div>
+
+                </div>
+              </div>)
+          })}
+        </div>
       </div>
 
     </div>

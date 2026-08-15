@@ -1,34 +1,29 @@
 import axios from 'axios';
-import React, { use, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { useLocation } from "react-router-dom";
 
+const CategoryWisePage = (state) => {
 
-const GetAllProduct = () => {
-
+    const [products, setProduct] = useState([]);
     const url = import.meta.env.VITE_URL;
 
 
-    const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
 
-    const getAllProducts = async () => {
-        try {
-            const response = await axios.get(
-                `${url}/api/product/getAllProducts`
-            );
 
-            console.log(response.data);
-            setProducts(response.data.products);
+    const location = useLocation();
+    console.log(location.state);
 
-        } catch (error) {
-            console.log("Error:", error);
-        }
-    };
+
+    const getProductsByCategory = async () => {
+
+        const data = await axios.get(`${url}/api/category/getcategoryWiseProducts/${location.state.categoryId}`)
+        console.log("-->", data.data.products);
+        setProduct(data.data.products);
+    }
 
     useEffect(() => {
-        getAllProducts();
-    }, []);
-
+        getProductsByCategory();
+    }, [location.state])
 
 
     return (
@@ -89,9 +84,7 @@ const GetAllProduct = () => {
                                     Cart
                                 </button>
 
-                                <button className="w-1/2 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition"
-                                    onClick={() => navigate(`/productDetails/${p._id}`)}
-                                >
+                                <button className="w-1/2 py-2 rounded-lg bg-black text-white text-sm font-medium hover:bg-gray-800 transition">
                                     Buy Now
                                 </button>
 
@@ -105,8 +98,7 @@ const GetAllProduct = () => {
             </div>
 
         </div>
-    );
-};
+    )
+}
 
-export default GetAllProduct;
-
+export default CategoryWisePage

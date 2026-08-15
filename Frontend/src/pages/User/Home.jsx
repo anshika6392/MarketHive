@@ -15,7 +15,7 @@ const Home = () => {
     try {
       const result = await axios.get(`${url}/api/product/getRandomProducts`);
       setRandomProducts(result.data.data);
-      console.log(result.data.data)
+      // console.log(result.data.data)
     } catch (error) {
       console.log(error)
     }
@@ -96,7 +96,7 @@ const Home = () => {
 
                     {/* Button */}
                     <div className="p-3 pt-0">
-                      <button className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition" onClick={() => navigate(`/productDetails/${p._id}`)}>
+                      <button className="w-full py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white text-xs sm:text-sm font-medium hover:from-green-600 hover:to-green-700 transition" onClick={() => navigate(`/BuyNow/${p._id}`)}>
                         Buy Now
                       </button>
                     </div>
